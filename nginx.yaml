@@ -1,0 +1,47 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx-foo-app
+  labels:
+    app: nginx-foo
+spec:
+  containers:
+  - command:
+    - /agnhost
+    - netexec
+    - --http-port
+    - "8080"
+    image: registry.k8s.io/e2e-test-images/agnhost:2.39
+    name: foo-app
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-foo-service
+spec:
+  selector:
+    app: nginx-foo
+  ports:
+  # Default port used by the image
+  - port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-example-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: /test(/|$)(.*)
+        backend:
+          service:
+            name: nginx-foo-service
+            port:
+              number: 8080
+              
+              
+              
