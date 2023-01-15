@@ -37,10 +37,10 @@ spec:
   - host: eintest.apps.lab.ocp.lan
     http:
       paths:
-#      - path: /
-#        pathType: Exact
-      - pathType: Prefix
-        path: /test(/|$)(.*)
+      - path: /
+        pathType: Exact
+#      - pathType: Prefix
+#        path: /test(/|$)(.*)
         backend:
           service:
             name: nginx-foo-service
